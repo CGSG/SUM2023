@@ -305,6 +305,27 @@ class _mat4 {
     return this.mul(mat4().setFrustum(Left, Right, Bottom, Top, Near, Far));
   } // End of 'frustum' function
 
+  transform(V) {
+    let w = V.x * this.m[0][3] + V.y * this.m[1][3] + V.z * this.m[2][3] + this.m[3][3];
+
+    return vec3((V.x * this.m[0][0] + V.y * this.m[1][0] + V.z * this.m[2][0] + this.m[3][0]) / w,
+                (V.x * this.m[0][1] + V.y * this.m[1][1] + V.z * this.m[2][1] + this.m[3][1]) / w,
+                (V.x * this.m[0][2] + V.y * this.m[1][2] + V.z * this.m[2][2] + this.m[3][2]) / w);
+  } // End of 'transform' function
+
+  transformVector(V) {
+    return vec3(V.x * this.m[0][0] + V.y * this.m[1][0] + V.z * this.m[2][0],
+                V.x * this.m[0][1] + V.y * this.m[1][1] + V.z * this.m[2][1],
+                V.x * this.m[0][2] + V.y * this.m[1][2] + V.z * this.m[2][2]);
+  } // End of 'transformVector' function
+
+  transformPoint(V) {
+    return vec3(V.x * this.m[0][0] + V.y * this.m[1][0] + V.z * this.m[2][0] + this.m[3][0],
+                V.x * this.m[0][1] + V.y * this.m[1][1] + V.z * this.m[2][1] + this.m[3][1],
+                V.x * this.m[0][2] + V.y * this.m[1][2] + V.z * this.m[2][2] + this.m[3][2]);
+  } // End of 'transformPoint' function
+
+
   toArray() {
     return [].concat(...this.m);
   } // End of 'toArray' function

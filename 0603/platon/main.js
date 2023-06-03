@@ -28,6 +28,7 @@ export function myOnLoad() {
   console.log(b1.length);
   m1 = mat4().setTranslate(29, 8, 30);
 
+  let trans = mat4().setTranslate(29, 8, 30).transformPoint(vec3(0, 0, 0));
 
 
   let m;

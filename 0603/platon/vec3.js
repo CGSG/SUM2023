@@ -10,6 +10,35 @@ class _vec3 {
   dot(v) {
     return this.x * v.x + this.y * v.y + this.z * v.z;
   };
+  
+  cross(v) {
+    return vec3(this.y * v.z - this.z * v.y,
+                this.z * v.x - this.x * v.z,
+                this.x * v.y - this.y * v.x);
+  } // End of 'cross' function
+
+  len2() {
+    return this.x * this.x + this.y * this.y + this.z * this.z;
+  } // End of 'len2' function
+
+  len() {
+    let len = this.x * this.x + this.y * this.y + this.z * this.z;
+
+    if (len != 0 && len != 1)
+      return Math.sqrt(len);
+    return len;
+  } // End of 'len' function
+
+  normalize() {
+    let len = this.x * this.x + this.y * this.y + this.z * this.z;
+
+    if (len != 0 && len != 1) {
+      len = sqrt(len);
+      return vec3(this.x / len, this.y / len,  this.z / len);
+    }
+    return vec3(this);
+  } // End of 'normalize' function
+
   toArray() {
     return [this.x, this.y, this.z];
   };
