@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CGSG:VG4 CGSG'SummerPractice</title>
+  </head>
+  <body>
+    <style>
+      td {
+        color: Red;
+      }
+      td.a {
+        color: green;
+      }
+      #myCan {
+        background-color: Orange;
+      }
+    </style>
+    Проверка: test CGSG'SummerPractice
+    <table border="2" border-color="#FF00EE">
+      <tr>
+        <td>a</td>
+        <td id="a1" class="a" colspan="2">b</td>
+      </tr>
+      <tr>
+        <td>a</td>
+        <td rowspan="2">b</td>
+        <td>c</td>
+      </tr>
+      <tr>
+        <td>a</td>
+        <td class="a">c</td>
+      </tr>
+    </table>
+
+    <div id="a1">Qu</div>
+    <canvas
+      id="myCan"
+      width="102px"
+      height="102px"
+      style="border: 1px Solid Red"
+    ></canvas>
+    <script type="module">
+      import * as lib from "./mylib.js";
+      lib.doIt();
+
+      window.addEventListener("load", () => {
+        window.setInterval(() => {
+          lib.doIt(30);
+          lib.initGL();
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>

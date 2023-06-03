@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CGSG:VG4 CGSG'SummerPractice. Input sample</title>
+  </head>
+  <body>
+    <h1>Input sample</h1>
+    <p>Info: <div id='info'></div>
+    
+    <p>
+    <form action='index.html' method='get'>
+      <br /><input type='text' name="a" value='abc' placeholder="имя?"/>
+      <br /><input type='time' name="b" value='10:30' />
+      <br /><input type='date' name="c" value='2023-02-08' />
+      <br /><input type='checkbox' name="d" checked /> Is pause
+      <br /><input type='radio' name="e" value='yes' /> Хочу
+      <input type='radio' name="e" checked value='no' /> Не хочу
+      <br /><input type='reset' name='res' value='Reset'/>
+      <br />Value: <input type='range' name='slide' min='10' max='30' step="0.1" value='18'/>
+      <br />Color: <input type='color' name='color' value='#FF00FF'/>
+      <select name="Gender">
+        <option value="undefined">не определен</option>
+        <optgroup label="Традиционные">...</optgroup>
+        <option value="male">мужчина</option>
+        <option value="female" selected>женщина</option>
+      </select>
+      <button>Кнопка</button>
+      
+      <input type='submit' name='sub' value='Send'/>
+    </form>
+    
+    <table>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+      </tr>
+    </table>
+    
+    <!-- Common styles/scripts -->
+    <style>
+      tr:nth-child(2n)
+      {
+        background-color: #FFCCFF;
+      }
+      tr:nth-child(2n+1)
+      {
+        background-color: #CCFFFF;
+      }
+      input[type='color']:hover
+      {
+        border: 1px Red Dotted;
+      }
+      input:nth-of-type(2n)
+      {
+        font-weight: Bold;
+      }
+      input,select,button
+      {
+        zoom: 2.0;
+      }
+      form
+      {
+        font-size: 2em;
+      }
+    </style>
+    <script src="main.js"></script>
+    <script>
+      window.addEventListener("load", () => {
+        myOnLoad();
+      });
+    </script>
+
+  </body>
+</html>
