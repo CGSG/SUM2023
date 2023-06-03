@@ -1,3 +1,5 @@
+import * as vigl from './timer.js';
+
 // Global context data
 let canvas,
   gl,
@@ -7,64 +9,9 @@ let canvas,
   posBuffer,
   frameVertexArray,
   frameScale = 1,
-  isPause = false;
+  myTimer;
 
-// Timer data
-let startTime,
-  oldTime,
-  oldTimeFPS,
-  pauseTime,
-  timePerSec,
-  frameCounter,
-  FPS,
-  globalTime,
-  globalDeltaTime,
-  localTime,
-  localDeltaTime;
 let SetColor = [1, 0, 0];
-
-function myGetTime() {
-  const date = new Date();
-  let t =
-    date.getMilliseconds() / 1000.0 +
-    date.getSeconds() +
-    date.getMinutes() * 60;
-  return t;
-}
-
-function myTimerInit() {
-  startTime = oldTime = oldTimeFPS = myGetTime();
-  frameCounter = 0;
-  isPause = false;
-  FPS = 30.0;
-  pauseTime = 0;
-}
-
-function myTimer() {
-  let t = myGetTime();
-
-  /* Global time */
-  globalTime = t;
-  globalDeltaTime = t - oldTime;
-  /* Time with pause */
-  if (isPause) {
-    localDeltaTime = 0;
-    pauseTime += t - oldTime;
-  } else {
-    localDeltaTime = globalDeltaTime;
-    localTime = t - pauseTime - startTime;
-  }
-  /* FPS */
-  frameCounter++;
-  if (t - oldTimeFPS > 3) {
-    FPS = frameCounter / (t - oldTimeFPS);
-    oldTimeFPS = t;
-    frameCounter = 0;
-    let tag = document.getElementById("fps");
-    if (tag != null) tag.innerHTML = FPS.toFixed(3);
-  }
-  oldTime = t;
-}
 
 const frameUniformBufferIndex = 5;
 
@@ -83,7 +30,7 @@ function loadShader(type, source) {
   return shader;
 }
 
-function initGL() {
+export function initGL() {
   canvas = document.getElementById("myCan");
   gl = canvas.getContext("webgl2");
   gl.clearColor(0.3, 0.47, 0.8, 1);
@@ -140,28 +87,31 @@ function initGL() {
       frameUniformBufferIndex
     );
 
-    myTimerInit();
+    myTimer = new vigl.Timer();
   });
 }
 
 var indices = new Uint16Array([0, 1, 3, 2]);
 
-function Render() {
+export function Render() {
   if (time_loc == -2) return;
 
-  myTimer();
+  if (myTimer != undefined)
+    myTimer.response('fps');
   let color_loc = gl.getUniformLocation(shaderProgram, "SetColor");
   if (color_loc != -1) gl.uniform3fv(color_loc, new Float32Array(SetColor));
 
-  if (time_loc != -1) {
-    gl.uniform1f(time_loc, localTime);
+  if (time_loc != -1 && myTimer != undefined) {
+    gl.uniform1f(time_loc, myTimer.localTime);
   }
   gl.bindBuffer(gl.UNIFORM_BUFFER, frameBuffer);
   //const data = new Float32Array([1, 2, 3, 4]);
-  frameData[4] = localTime;
-  frameData[5] = localDeltaTime;
-  frameData[6] = globalTime;
-  frameData[7] = globalDeltaTime;
+  if (myTimer != undefined) {
+    frameData[4] = myTimer.localTime;
+    frameData[5] = myTimer.localDeltaTime;
+    frameData[6] = myTimer.globalTime;
+    frameData[7] = myTimer.globalDeltaTime;
+  }
   gl.bufferData(gl.UNIFORM_BUFFER, new Float32Array(frameData), gl.STATIC_DRAW);
   //gl.bufferSubData(gl.UNIFORM_BUFFER, 0, new Float32Array([1, 2, 3, 4, t]));
   gl.bindBufferBase(gl.UNIFORM_BUFFER, frameUniformBufferIndex, frameBuffer);
@@ -172,14 +122,14 @@ function Render() {
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
 
-function myDragHandle(e) {
+export function myDragHandle(e) {
   e.preventDefault();
   if (e.buttons & 1) {
     frameData[0] -= (frameData[1] * e.movementX) / gl.canvas.width;
     frameData[2] -= (frameData[3] * -e.movementY) / gl.canvas.height;
   }
 }
-function myWheelHandle(e) {
+export function myWheelHandle(e) {
   e.preventDefault();
   let x = (e.x - gl.canvas.offsetLeft) / gl.canvas.width,
     y = (gl.canvas.height - 1 - (e.y - gl.canvas.offsetTop)) / gl.canvas.height,
@@ -203,7 +153,7 @@ let assoc = {
   sl_Rot: ["Rot", 14],
 };
 
-function myReset() {
+export function myReset() {
   frameData = [-2, 4, -2, 4, 0, 0, 0, 0, 0.35, 0.03, 0.35, 0.03, 0, 1, 0, 0];
   frameScale = 1;
   SetColor = [1, 0, 0];
@@ -215,19 +165,19 @@ function myReset() {
   if (t != null)
     t.value = "#FF0000";
 }
-function myPause(tag) {
-  isPause = tag.checked ? true : false;
+export function myPause(e) {
+  myTimer.isPause = e.target.checked ? true : false;
 }
-function mySlider(tag) {
-  let nam = document.getElementById(assoc[tag.id][0]);
+export function mySlider(e) {
+  let nam = document.getElementById(assoc[e.target.id][0]);
   if (nam != null) {
-    nam.innerHTML = (tag.value / 100.0).toFixed(2);
-    frameData[assoc[tag.id][1]] = tag.value / 100.0;
+    nam.innerHTML = (e.target.value / 100.0).toFixed(2);
+    frameData[assoc[e.target.id][1]] = e.target.value / 100.0;
   }
 }
-function myColor(tag) {
+export function myColor(e) {
   let
-    h = tag.value,
+    h = e.target.value,
     r = eval("0x" + h[1] + h[2]),
     g = eval("0x" + h[3] + h[4]),
     b = eval("0x" + h[5] + h[6]);
