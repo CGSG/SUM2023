@@ -262,12 +262,12 @@ class _mat4 {
       Up = Right.cross(Dir).normalize();
     this.m =
     [
-      [Right.X, Up.X, -Dir.X, 0],
-      [Right.Y, Up.Y, -Dir.Y, 0],
-      [Right.Z, Up.Z, -Dir.Z, 0],
-      [-VecDotVec(Loc, Right), -VecDotVec(Loc, Up), VecDotVec(Loc, Dir), 1],
+      [Right.x, Up.x, -Dir.x, 0],
+      [Right.y, Up.y, -Dir.y, 0],
+      [Right.z, Up.z, -Dir.z, 0],
+      [-Loc.dot(Right), -Loc.dot(Up), Loc.dot(Dir), 1],
     ];
-    return mat4(r);
+    return this;
   } // End of 'setView' function
 
   setOrtho(Left, Right, Bottom, Top, Near, Far) {
@@ -330,5 +330,5 @@ class _mat4 {
 } // End of '_mat4' class
 
 export function mat4(...args) {
-  return new _mat4(args);
+  return new _mat4(...args);
 } // End of 'mat4' function
