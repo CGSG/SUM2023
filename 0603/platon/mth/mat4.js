@@ -1,4 +1,5 @@
 import {vec3} from "./vec3.js";
+export {vec3};
 
 class _mat4 {
   addMethod(obj, name, func) {
@@ -9,7 +10,7 @@ class _mat4 {
       else if (typeof old == 'function')
         return old.apply(obj, args);
     }
-  }
+  } // End of 'addMethod' function
 
   constructor(m = null) {
     if (m == null)
@@ -53,7 +54,7 @@ class _mat4 {
         return this.scale(v.x, v.y, v.z);
       return this.scale(v, v, v);
     });
-  }
+  } // End of 'constructor' function
 
   setRotate(AngleInDegree, R) {
     let a = AngleInDegree * Math.PI, sine = Math.sin(a), cosine = Math.cos(a);
@@ -96,10 +97,8 @@ class _mat4 {
     for (let i = 0; i < 4; i++)
       for (let j = 0; j < 4; j++)
         r[i][j] = this.m[j][i];
-    this.m = r;  
-    return this;
+    return mat4(r);
   } // End of 'transpose' function
-
 
   mul(m) {
     let matr;
@@ -173,9 +172,9 @@ class _mat4 {
 
     if (det == 0)
     {
-      this.m = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+      let m = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
 
-      return this;
+      return mat4(m);
     }
 
     /* Build adjoint matrix */
@@ -251,24 +250,24 @@ class _mat4 {
     return this;
   } // End of 'inverse' function
 
-  setView(Loc, At, Up1) {
-    /*
-    VEC
-      Dir = VecNormalize(VecSubVec(At, Loc)),
-      Right = VecNormalize(VecCrossVec(Dir, Up1)),
-      Up = VecNormalize(VecCrossVec(Right, Dir));
-    MATR m =
-    {
-      {
-        {Right.X, Up.X, -Dir.X, 0},
-        {Right.Y, Up.Y, -Dir.Y, 0},
-        {Right.Z, Up.Z, -Dir.Z, 0},
-        {-VecDotVec(Loc, Right), -VecDotVec(Loc, Up), VecDotVec(Loc, Dir), 1}
-      }
-    };
-    */
-
+  setIdentity() {
+    this.m = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
     return this;
+  } // End of 'inverse' function
+
+  setView(Loc, At, Up1) {
+    let
+      Dir = At.sub(Loc).normalize(),
+      Right = Dir.cross(Up1).normalize(),
+      Up = Right.cross(Dir).normalize();
+    this.m =
+    [
+      [Right.X, Up.X, -Dir.X, 0],
+      [Right.Y, Up.Y, -Dir.Y, 0],
+      [Right.Z, Up.Z, -Dir.Z, 0],
+      [-VecDotVec(Loc, Right), -VecDotVec(Loc, Up), VecDotVec(Loc, Dir), 1],
+    ];
+    return mat4(r);
   } // End of 'setView' function
 
   setOrtho(Left, Right, Bottom, Top, Near, Far) {
@@ -325,12 +324,11 @@ class _mat4 {
                 V.x * this.m[0][2] + V.y * this.m[1][2] + V.z * this.m[2][2] + this.m[3][2]);
   } // End of 'transformPoint' function
 
-
   toArray() {
     return [].concat(...this.m);
   } // End of 'toArray' function
-}
+} // End of '_mat4' class
 
 export function mat4(...args) {
   return new _mat4(args);
-}
+} // End of 'mat4' function

@@ -1,17 +1,6 @@
-import {vec3} from "./vec3.js";
-import {mat4} from "./mat4.js";
+//import {vec3} from "./vec3.js";
+import {mat4, vec3} from "./mth/mat4.js";
 
-/*
-function addMethod(obj, name, func) {
-  var old = obj[name];
-  obj[name] = (...args) => {
-    if (func.length == args.length)
-      return func.apply(obj, args);
-    else if (typeof old == 'function')
-      return old.apply(obj, args);
-  }
-}
-*/
 export function myOnLoad() {
   let aa = mat4();
   aa.setTranslate(vec3(0, 1, 2));
