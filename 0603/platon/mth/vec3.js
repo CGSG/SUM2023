@@ -8,7 +8,10 @@ class _vec3 {
       else
         this.x = x.x, this.y = x.y, this.z = x.z;
     else
-      this.x = x, this.y = y, this.z = z;
+      if (y == undefined && z == undefined)
+        this.x = x, this.y = x, this.z = x;
+      else
+        this.x = x, this.y = y, this.z = z;
   } // End of 'constructor' function
 
   set(x, y, z) {
